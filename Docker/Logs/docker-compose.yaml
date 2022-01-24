@@ -1,0 +1,44 @@
+version: '3'
+services:
+
+  fluentd:
+    container_name: fluentd
+    image: pcuesta/logging:0.1
+    volumes:
+    - /var/lib/docker/containers:/fluentd/log/containers
+    - ./tmp:/output/
+    - ./config:/fluentd/etc/
+
+
+  server:
+    image: pcuesta/node-blog:0.1
+    ports:
+      - 8080:8080
+    depends_on:
+      - fluentd
+  
+  # mongodb:
+  #   image: mongo:5.0
+  #   restart: always
+  #   ports:
+  #     - 27017:27017
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: test
+  #     MONGO_INITDB_ROOT_PASSWORD: testPassword
+
+
+  # elasticsearch: # port 9200
+  #   image: elasticsearch:7.9.1
+  #   container_name: elasticsearch
+  #   environment:
+  #   - node.name=elasticsearch
+  #   - discovery.type=single-node
+
+  # kibana:
+  #   image: kibana:7.9.1
+  #   container_name: kibana
+  #   ports:
+  #     - "5601:5601"
+  #   environment:
+  #     ELASTICSEARCH_URL: http://elasticsearch:9200
+  #     ELASTICSEARCH_HOSTS: http://elasticsearch:9200    
