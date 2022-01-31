@@ -1,0 +1,20 @@
+apiVersion: k0sctl.k0sproject.io/v1beta1
+kind: Cluster
+metadata:
+  name: k0s-cluster
+spec:
+  hosts:
+  - ssh:
+      address: 172.16.16.101
+      user: root
+      port: 22
+      keyPath: /home/pablo/.ssh/id_rsa
+    role: controller
+  - ssh:
+      address: 172.16.16.102
+      user: root
+      port: 22
+      keyPath: /home/pablo/.ssh/id_rsa
+    role: worker
+  k0s:
+    version: 1.23.1+k0s.1

@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: create the 'ubuntu' user
+      user:
+        name: ubuntu      
+        append: yes
+        group: sudo
+        create_home: yes
+        shell: /bin/bash
+        password: "{{ lookup('env', 'USER_PASSWORD') }}"
+        state: present
+    
+    - name: set up authorized keys for the ubuntu user
+      authorized_key:
+        user: ubuntu
+        state: present
+        key: "{{ lookup('file', item) }}"
+      with_fileglob:
+      - /home/pablo/.ssh/vagrant/id_rsa.pub
