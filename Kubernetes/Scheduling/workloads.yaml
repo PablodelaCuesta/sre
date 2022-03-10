@@ -1,0 +1,59 @@
+
+# Pod with resources defined
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+  labels:
+    name: app
+spec:
+  containers:
+  - name: app
+    image: nginx
+    resources:
+      limits:
+        memory: "256Mi"
+        cpu: "1"
+      requests:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80
+
+---
+
+# Definición de rangos de recursos por defecto
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mem-limit-range
+spec:
+  limits:
+  - default:
+      memory: 512Mi
+    defaultRequest:
+      memory: 256Mi
+    type: Container
+
+---
+
+# Pod con etiqueta de selección de nodo
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-affinity
+  labels:
+    name: app-affinity
+spec:
+  nodeSelector:
+    node: blue
+  containers:
+  - name: app-affinity
+    image: nginx
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80
