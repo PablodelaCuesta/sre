@@ -20,7 +20,7 @@ variable "nginx_ext_port" {
 # List validaton
 variable "nginx_list_ports" {
   type    = list(number)
-  default = [1880, 1890, 1990]
+  default = [8080, 8081, 8082]
 
   validation {
     condition     = min(var.nginx_list_ports...) > 0 && max(var.nginx_list_ports...) <= 65535
@@ -30,4 +30,18 @@ variable "nginx_list_ports" {
 
 locals {
   container_count = 10
+}
+
+variable "images" {
+  type        = map(any)
+  description = "Images containers for differents environments."
+  default = {
+    dev  = "nginx:latest",
+    prod = "nginx:1.21-alpine"
+  }
+}
+
+variable "nginx_ext_port_map" {
+  type        = map(list(number))
+  description = "Ports depends on environment."
 }

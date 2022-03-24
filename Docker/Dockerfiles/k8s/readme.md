@@ -1,0 +1,1 @@
+This dockerfile install all the tools for control a kubernetes cluster

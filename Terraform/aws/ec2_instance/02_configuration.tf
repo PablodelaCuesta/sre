@@ -6,3 +6,8 @@ resource "aws_key_pair" "terraform" {
     "Name" = "Terraform public key"
   }
 }
+
+data "aws_availability_zones" "zones" {
+  state = "available"
+
+}

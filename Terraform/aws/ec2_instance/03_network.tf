@@ -8,12 +8,16 @@ resource "aws_vpc" "main" {
 
 # public subnet
 resource "aws_subnet" "public-subnet" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.public-subnet-cidr-block
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public-subnet-cidr-block
   map_public_ip_on_launch = true
 
+  for_each          = toset(data.aws_availability_zones.zones.names)
+  availability_zone = each.key
+
   tags = {
-    Name = "public"
+    "Name" : "public"
+    "Zones" : "Zone: ${each.key}"
   }
 }
 
@@ -25,8 +29,6 @@ resource "aws_internet_gateway" "igw" {
 # Routes tables
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.main.id
-  
-
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
@@ -40,7 +42,10 @@ resource "aws_route_table" "public_route_table" {
 
 # Match Route table with Subnet
 resource "aws_route_table_association" "public" {
-  subnet_id = aws_subnet.public-subnet.id
+  
+  for_each = aws_subnet.public-subnet
+
+  subnet_id      = each.key
   route_table_id = aws_route_table.public_route_table.id
 }
 

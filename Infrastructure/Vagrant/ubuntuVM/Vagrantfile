@@ -1,0 +1,13 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "hashicorp/bionic64"
+    # Checkea las opciones aqui https://www.vagrantup.com/docs/networking/private_network
+    config.vm.network "private_network", ip: "192.168.100.5"
+    config.vm.hostname = "ubuntuVM"
+    config.vm.provider "virtualbox" do |vb|
+      vb.memory = "4096"
+      vb.cpus = 4
+      vb.name = "ubuntuVM"
+    end
+    
+  end
+  

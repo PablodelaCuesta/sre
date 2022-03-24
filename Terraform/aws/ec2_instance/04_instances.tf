@@ -26,10 +26,15 @@ resource "aws_instance" "web" {
     aws_security_group.sg-public.id
   ]
 
-  subnet_id = aws_subnet.public-subnet.id
+  for_each          = toset(data.aws_availability_zones.zones.names)
+  availability_zone = each.key
+
+  # count     = length(data.aws_availability_zones.zones.names)
+  # subnet_id = aws_subnet.public-subnet[count.index].id
 
   tags = {
     "Name" : "web"
     "Example" : "True"
+    "Zones" : "Zone: ${each.key}"
   }
 }

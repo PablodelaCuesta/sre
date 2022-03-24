@@ -14,6 +14,12 @@ variable "public-subnet-cidr-block" {
   type    = string
   default = "10.0.1.0/24"
 }
+# variable "public-subnet-cidrs" {
+#   type = map(object({
+#     cidr_block = string    
+#   }))
+
+# }
 variable "ec2_instance_type" {
   type        = string
   description = "Default instance type for this project"
